@@ -24,6 +24,7 @@ executable EvieWarp
                        text,
                        bytestring,
                        wai,
+                       wai-app-static,
                        http-types,
                        warp
   -- hs-source-dirs:
