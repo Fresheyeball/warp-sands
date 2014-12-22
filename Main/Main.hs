@@ -21,7 +21,7 @@ main = do
   run port app
 
 app :: Application
-app req res | True         = handleSecure 
+app req res | True         = handleSecure
             | isSecure req = handleSecure
             | otherwise    = insecureError
   where

@@ -2,7 +2,7 @@
 module User.User where
 
 import           Control.Lens
-import           Data.Aeson
+-- import           Data.Aeson
 import           Data.ByteString.Lazy.Internal (ByteString)
 import           Network.Wreq
 

@@ -26,5 +26,5 @@ data Organization = Organization {
   department :: String
 }
 
-api :: [Char]
+api :: String
 api = "https://www.googleapis.com/"
