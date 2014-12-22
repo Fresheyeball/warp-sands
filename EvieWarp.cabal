@@ -17,15 +17,18 @@ cabal-version:       >=1.10
 
 executable EvieWarp
   main-is:             Main/Main.hs
-  -- other-modules:
+  other-modules:       Config,
+                       User.User
   -- other-extensions:
   build-depends:       base >=4.6 && <4.7,
                        aeson,
                        text,
                        bytestring,
+                       lens,
                        wai,
                        wai-app-static,
                        http-types,
+                       wreq,
                        warp
   -- hs-source-dirs:
   default-language:    Haskell2010
