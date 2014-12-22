@@ -13,9 +13,25 @@ dummy = User {
   name = HumanName { givenName = "GreatBig", familyName = "Dummy" },
   primaryEmail = "f@g.c",
   password = "12345",
-  organizations = [Organization {title = "Officer", department = "Drugs"}],
+  organizations = [Organization { title = "Officer", department = "Drugs" }],
   suspended = False
 }
+
+-- {
+--   "name":{
+--     "givenName":"GreatBig",
+--     "familyName":"Dummy"
+--   },
+--   "primaryEmail":"f@g.c",
+--   "password":"12345",
+--   "organizations":[
+--     {
+--       "department":"Drugs",
+--       "title":"Officer"
+--     }
+--   ],
+--   "suspended":false
+-- }
 
 createAccount :: IO ByteString
 createAccount = do
