@@ -34,7 +34,7 @@ app req res | True         = handleSecure
 get :: Application
 get req res = case pathInfo req of
   ["login"]     -> res login
-  ["signup"]    -> createAccount >>= res . plain
+  ["signup"]    -> createAccount' >>= res . responseLBS status200 [(hContentType, "application/json")]
   ("static":xs) -> static req{ pathInfo = xs } res
   _             -> res fourOhFour
 
@@ -42,7 +42,7 @@ static :: Application
 static = staticApp . defaultWebAppSettings $ "/static"
 
 plain :: ByteString -> Response
-plain = responseLBS status200 [(hContentType, "plain/text")]
+plain = responseLBS status200 [(hContentType, "text/plain")]
 
 fourOhFour, login :: Response
 fourOhFour = plain "Error: 404"
