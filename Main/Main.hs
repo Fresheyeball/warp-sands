@@ -21,15 +21,15 @@ main = do
   run port app
 
 app :: Application
-app req res | isSecure req = handleSecure
+app req res | True         = handleSecure 
+            | isSecure req = handleSecure
             | otherwise    = insecureError
   where
   handleSecure = case parseMethod $ requestMethod req of
     Right GET  -> get req res
-    Right _    -> p "Method not found"
-    Left  _    -> p "Uh something went wrong"
-  insecureError = p "Your connection is not secure"
-  p = res . plain
+    Right _    -> res $ plain "Method not found"
+    Left  _    -> res $ plain "Uh something went wrong"
+  insecureError = res $ plain "Your connection is not secure"
 
 get :: Application
 get req res = case pathInfo req of
