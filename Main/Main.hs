@@ -1,9 +1,11 @@
 {-# LANGUAGE OverloadedStrings #-}
 module Main where
 
-import           Data.ByteString.Lazy.Internal  (ByteString)
+import qualified Data.ByteString.Internal       as B  (ByteString)
+import qualified Data.ByteString.Lazy.Internal  as LB (ByteString, packChars)
+import           Data.Monoid                    ((<>))
 import           Network.HTTP.Types             (status200)
-import           Network.HTTP.Types.Header      (hContentType)
+import           Network.HTTP.Types.Header      (HeaderName (), hContentType)
 import           Network.HTTP.Types.Method      (StdMethod (..), parseMethod)
 import           Network.Wai                    (Application (), Response (),
                                                  isSecure, pathInfo,
@@ -20,29 +22,39 @@ main = do
   putStrLn $ "We are listening on port " ++ show port ++ "."
   run port app
 
+json, text :: (HeaderName, B.ByteString)
+json = (hContentType, "application/json")
+text = (hContentType, "text/plain")
+
 app :: Application
 app req res | True         = handleSecure
             | isSecure req = handleSecure
             | otherwise    = insecureError
+
   where
+
   handleSecure = case parseMethod $ requestMethod req of
     Right GET  -> get req res
-    Right _    -> res $ plain "Method not found"
-    Left  _    -> res $ plain "Uh something went wrong"
-  insecureError = res $ plain "Your connection is not secure"
+    Right _    -> p "METHOD not found"
+    Left  x    -> p $ "Uh something went wrong" <> LB.packChars (show x)
+
+  insecureError = p "Your connection is not secure"
+
+  p             = res . plain
 
 get :: Application
 get req res = case pathInfo req of
+
   ["login"]     -> res login
-  ["signup"]    -> createAccount' >>= res . responseLBS status200 [(hContentType, "application/json")]
+  ["signup"]    -> createAccount' >>= res . responseLBS status200 [json]
   ("static":xs) -> static req{ pathInfo = xs } res
   _             -> res fourOhFour
 
 static :: Application
 static = staticApp . defaultWebAppSettings $ "/static"
 
-plain :: ByteString -> Response
-plain = responseLBS status200 [(hContentType, "text/plain")]
+plain :: LB.ByteString -> Response
+plain = responseLBS status200 [text]
 
 fourOhFour, login :: Response
 fourOhFour = plain "Error: 404"

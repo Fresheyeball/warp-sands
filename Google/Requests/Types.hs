@@ -1,18 +1,15 @@
 {-# LANGUAGE OverloadedStrings #-}
 module Google.Requests.Types where
 
--- import           Control.Lens
 import           Control.Applicative
 import           Control.Monad
 import           Data.Aeson
 import           Data.Text
--- import           Data.ByteString.Lazy.Internal (ByteString)
--- import           Network.Wreq
 
 data User = User {
   name          :: HumanName,
-  primaryEmail  :: !Text,
-  password      :: !Text,
+  primaryEmail  :: Text,
+  password      :: Text,
   organizations :: [Organization],
   suspended     :: Bool
 }
@@ -70,8 +67,8 @@ instance ToJSON HumanName where
 -- -- -- -- --
 
 data Organization = Organization {
-  title      :: !Text,
-  department :: !Text
+  title      :: Text,
+  department :: Text
 } deriving(Show)
 
 ot, od :: Text
